@@ -1,0 +1,132 @@
+directive @auth on FIELD_DEFINITION
+
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """Deferred when true or undefined."""
+  if: Boolean = true
+
+  """Unique name"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+input ConfirmUploadInput {
+  filename: String!
+  folderId: ID
+  hash: String!
+  mimeType: String!
+  size: Int!
+}
+
+type DownloadURL {
+  downloadURL: String!
+  filename: String!
+}
+
+type File {
+  filename: String!
+  id: ID!
+  mimeType: String!
+  size: Int!
+  uploadDate: Time!
+}
+
+type Folder {
+  childrenFiles: [File!]!
+  childrenFolders: [Folder!]!
+  createdAt: Time!
+  id: ID!
+  name: String!
+  parentID: ID
+  path: String!
+  realPath: String!
+}
+
+input LoginUser {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  confirmUploads(uploads: [ConfirmUploadInput!]!): [File!]!
+  createFolder(name: String!, parentId: ID): Folder!
+  deleteFile(fileId: ID!): Boolean!
+  deleteFolder(folderId: ID!): Boolean!
+  getDownloadURL(fileId: ID!, publicToken: String): DownloadURL!
+  login(input: LoginUser!): AuthResponse!
+  preUploadCheck(files: [PreUploadFileInput!]!): PreUploadCheckResponse!
+  registerUser(input: RegisterUser!): AuthResponse!
+  revokePubliclyShared(publicToken: ID!): Boolean!
+  shareFilePublic(fileId: ID!): String!
+  shareFileWithUser(fileId: ID!, userId: ID!): ID!
+  shareFolderPublic(folderId: ID!): String!
+  shareFolderWithUser(folderId: ID!, userId: ID!): ID!
+  unshareFileWithUser(fileId: ID!, userId: ID!): Boolean!
+  unshareFolderWithUser(folderId: ID!, userId: ID!): Boolean!
+}
+
+type PreSignedURL {
+  filename: String!
+  hash: String!
+  uploadURL: String!
+}
+
+type PreUploadCheckResponse {
+  completedFiles: [File!]!
+  newFiles: [PreSignedURL!]!
+}
+
+input PreUploadFileInput {
+  filename: String!
+  folderId: ID
+  hash: String!
+}
+
+type Query {
+  getFileShares(fileId: ID!): [Share!]!
+  getFilesInFolder(folderId: ID, publicToken: String): [File!]!
+  getFolderDetails(folderId: ID!, publicToken: String): Folder
+  getFolderShares(folderId: ID!): [Share!]!
+  getFoldersInFolder(folderId: ID, publicToken: String): [Folder!]!
+  getMyShares: [Share!]!
+  me: User!
+}
+
+input RegisterUser {
+  email: String!
+  name: String!
+  password: String!
+}
+
+enum Role {
+  admin
+  user
+}
+
+type Share {
+  createdAt: String!
+  downloadCount: Int!
+  id: ID!
+  owner: User!
+  publicToken: String
+  shareType: String!
+  sharedWith: User
+}
+
+scalar Time
+
+type User {
+  createdAt: Time!
+  email: String!
+  id: ID!
+  name: String!
+  role: String!
+}
