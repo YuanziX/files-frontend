@@ -16,9 +16,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 type Documents = {
     "\n  mutation RegisterUser($name: String!, $email: String!, $password: String!) {\n    registerUser(input: { name: $name, email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": typeof types.RegisterUserDocument,
     "\n  mutation Login($email: String!, $password: String!) {\n    login(input: { email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": typeof types.LoginDocument,
-    "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": typeof types.GetFolderDetailsDocument,
-    "\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": typeof types.GetFilesDocument,
-    "\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n": typeof types.GetFoldersDocument,
+    "\n  query GetFolderDetails($folderId: ID!, $publicToken: String) {\n    getFolderDetails(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": typeof types.GetFolderDetailsDocument,
+    "\n  query GetFiles($folderId: ID, $publicToken: String) {\n    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": typeof types.GetFilesDocument,
+    "\n  query GetFolders($folderId: ID, $publicToken: String) {\n    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      createdAt\n    }\n  }\n": typeof types.GetFoldersDocument,
     "\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n": typeof types.CreateFolderDocument,
     "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": typeof types.PreUploadCheckDocument,
     "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n": typeof types.ConfirmUploadsDocument,
@@ -32,9 +32,9 @@ type Documents = {
 const documents: Documents = {
     "\n  mutation RegisterUser($name: String!, $email: String!, $password: String!) {\n    registerUser(input: { name: $name, email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": types.RegisterUserDocument,
     "\n  mutation Login($email: String!, $password: String!) {\n    login(input: { email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": types.LoginDocument,
-    "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": types.GetFolderDetailsDocument,
-    "\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": types.GetFilesDocument,
-    "\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n": types.GetFoldersDocument,
+    "\n  query GetFolderDetails($folderId: ID!, $publicToken: String) {\n    getFolderDetails(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": types.GetFolderDetailsDocument,
+    "\n  query GetFiles($folderId: ID, $publicToken: String) {\n    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": types.GetFilesDocument,
+    "\n  query GetFolders($folderId: ID, $publicToken: String) {\n    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      createdAt\n    }\n  }\n": types.GetFoldersDocument,
     "\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n": types.CreateFolderDocument,
     "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": types.PreUploadCheckDocument,
     "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n": types.ConfirmUploadsDocument,
@@ -71,15 +71,15 @@ export function graphql(source: "\n  mutation Login($email: String!, $password: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"): (typeof documents)["\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"];
+export function graphql(source: "\n  query GetFolderDetails($folderId: ID!, $publicToken: String) {\n    getFolderDetails(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"): (typeof documents)["\n  query GetFolderDetails($folderId: ID!, $publicToken: String) {\n    getFolderDetails(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"): (typeof documents)["\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"];
+export function graphql(source: "\n  query GetFiles($folderId: ID, $publicToken: String) {\n    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"): (typeof documents)["\n  query GetFiles($folderId: ID, $publicToken: String) {\n    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n"): (typeof documents)["\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n"];
+export function graphql(source: "\n  query GetFolders($folderId: ID, $publicToken: String) {\n    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      createdAt\n    }\n  }\n"): (typeof documents)["\n  query GetFolders($folderId: ID, $publicToken: String) {\n    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {\n      id\n      name\n      createdAt\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -12,6 +12,10 @@ interface StoreState {
 
   isUploadModalOpen: boolean;
   setIsUploadModalOpen: (isOpen: boolean) => void;
+
+  currentPublicToken: string | null;
+  SetCurrentPublicToken: (token: string | null) => void;
+
   currentFolderId: string | null;
   setCurrentFolderId: (id: string | null) => void;
 }
@@ -29,6 +33,10 @@ const useGlobalStore = create<StoreState>((set) => ({
 
   isUploadModalOpen: false,
   setIsUploadModalOpen: (isOpen) => set({ isUploadModalOpen: isOpen }),
+
+  currentPublicToken: null,
+  SetCurrentPublicToken: (token) => set({ currentPublicToken: token }),
+
   currentFolderId: null,
   setCurrentFolderId: (id) => set({ currentFolderId: id }),
 }));

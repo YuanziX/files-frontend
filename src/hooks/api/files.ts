@@ -1,8 +1,8 @@
 import { graphql } from "@/__generated__";
 
 export const GET_FOLDER_DETAILS_QUERY = graphql(`
-  query GetFolderDetails($folderId: ID!) {
-    getFolderDetails(folderId: $folderId) {
+  query GetFolderDetails($folderId: ID!, $publicToken: String) {
+    getFolderDetails(folderId: $folderId, publicToken: $publicToken) {
       id
       name
       path
@@ -12,8 +12,8 @@ export const GET_FOLDER_DETAILS_QUERY = graphql(`
 `);
 
 export const GET_FILES_QUERY = graphql(`
-  query GetFiles($folderId: ID) {
-    getFilesInFolder(folderId: $folderId) {
+  query GetFiles($folderId: ID, $publicToken: String) {
+    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {
       id
       filename
       mimeType
@@ -24,8 +24,8 @@ export const GET_FILES_QUERY = graphql(`
 `);
 
 export const GET_FOLDERS_QUERY = graphql(`
-  query GetFolders($folderId: ID) {
-    getFoldersInFolder(folderId: $folderId) {
+  query GetFolders($folderId: ID, $publicToken: String) {
+    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {
       id
       name
       createdAt

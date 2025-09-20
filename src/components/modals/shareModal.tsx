@@ -47,12 +47,16 @@ export const ShareModal = ({
         result = await shareFilePublic({ variables: { fileId: itemId } });
         const token = result.data?.shareFilePublic;
         if (token)
-          setPublicLink(`${window.location.origin}/share/file/${token}`);
+          setPublicLink(
+            `${window.location.origin}/share/file/${token}/${itemId}`
+          );
       } else {
         result = await shareFolderPublic({ variables: { folderId: itemId } });
         const token = result.data?.shareFolderPublic;
         if (token)
-          setPublicLink(`${window.location.origin}/share/folder/${token}`);
+          setPublicLink(
+            `${window.location.origin}/share/folder/${token}/${itemId}`
+          );
       }
     } catch (e) {
       console.error(e);
@@ -86,7 +90,10 @@ export const ShareModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md">
         <div className="flex justify-between items-center p-4 border-b">
           <h3 className="text-lg font-semibold truncate pr-4">

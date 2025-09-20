@@ -100,6 +100,7 @@ export function FileGridItem({ file }: { file: FileType }) {
 
 export function FileListItem({ file }: { file: FileType }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close the menu if a click occurs outside of it
@@ -150,7 +151,10 @@ export function FileListItem({ file }: { file: FileType }) {
           <div className="absolute top-10 right-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
             <ul className="py-1 text-sm text-gray-700">
               <li>
-                <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100">
+                <button
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
+                >
                   <Share2 size={16} />
                   <span>Share</span>
                 </button>
@@ -163,6 +167,14 @@ export function FileListItem({ file }: { file: FileType }) {
               </li>
             </ul>
           </div>
+        )}
+        {isShareModalOpen && (
+          <ShareModal
+            itemType="file"
+            itemId={file.id}
+            itemName={file.filename}
+            onClose={() => setIsShareModalOpen(false)}
+          />
         )}
       </div>
     </div>

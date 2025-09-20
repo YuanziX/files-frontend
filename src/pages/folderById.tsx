@@ -17,16 +17,19 @@ import React from "react";
 type FolderType = GetFoldersQuery["getFoldersInFolder"][0];
 
 export default function FolderById() {
-  const { id } = useParams();
-  const folderId = id ?? null;
+  const { id, public_token } = useParams();
+  const folderId = id == "" || id == null ? null : id;
+  const publicToken = public_token ?? null;
+
   const navigate = useNavigate();
 
   const globalStore = useGlobalStore();
 
   React.useEffect(() => {
     globalStore.SetShowTopBar(true);
+    globalStore.SetCurrentPublicToken(publicToken);
     globalStore.setCurrentFolderId(folderId);
-  }, []);
+  }, [folderId, publicToken]);
 
   const isModalOpen = useGlobalStore((s) => s.triggerCreateFolderModal);
 
@@ -35,7 +38,7 @@ export default function FolderById() {
     loading: folderDetailsLoading,
     error: folderDetailsError,
   } = useQuery(GET_FOLDER_DETAILS_QUERY, {
-    variables: { folderId: folderId ?? "" },
+    variables: { folderId: folderId!, publicToken: publicToken },
     skip: !folderId,
   });
 
@@ -43,30 +46,23 @@ export default function FolderById() {
     data: filesData,
     loading: filesLoading,
     error: filesError,
-    refetch: refetchFiles,
   } = useQuery(GET_FILES_QUERY, {
-    variables: { folderId },
+    variables: { folderId: folderId, publicToken: publicToken },
   });
 
   const {
     data: foldersData,
     loading: foldersLoading,
     error: foldersError,
-    refetch: refetchFolders,
   } = useQuery(GET_FOLDERS_QUERY, {
-    variables: { folderId },
+    variables: { folderId: folderId, publicToken: publicToken },
   });
 
   const [
     createFolder,
     { loading: createFolderLoading, error: createFolderError },
   ] = useMutation(CREATE_FOLDER_MUTATION, {
-    onCompleted: async () => {
-      await Promise.all([
-        refetchFolders({ folderId }),
-        refetchFiles({ folderId }),
-      ]);
-    },
+    refetchQueries: ["GetFiles", "GetFolders"],
   });
 
   const handleCreateFolder = (name: string) => {
@@ -100,7 +96,11 @@ export default function FolderById() {
   }
 
   const handleNavigate = (folder: FolderType) => {
-    navigate(`/dashboard/${folder.id}`);
+    if (publicToken) {
+      navigate(`/share/folder/${publicToken}/${folder.id}`);
+    } else {
+      navigate(`/dashboard/${folder.id}`);
+    }
   };
 
   const isLoading =
@@ -147,7 +147,13 @@ export default function FolderById() {
         {breadcrumbs.map((p, index) => (
           <div key={p.id || "root"} className="flex items-center">
             <span
-              onClick={() => navigate(`/dashboard/${p.id ?? ""}`)}
+              onClick={() => {
+                if (publicToken) {
+                  navigate(`/share/folder/${publicToken}/${p.id ?? ""}`);
+                } else {
+                  navigate(`/dashboard/${p.id ?? ""}`);
+                }
+              }}
               className={`${
                 index === breadcrumbs.length - 1
                   ? "font-semibold text-gray-800"

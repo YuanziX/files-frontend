@@ -15,6 +15,10 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<FolderById />} />
             <Route path="/dashboard/:id" element={<FolderById />} />
+            <Route
+              path="/share/folder/:public_token/:id"
+              element={<FolderById />}
+            />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Routes>

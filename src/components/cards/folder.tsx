@@ -3,6 +3,7 @@ import { GetFoldersQuery } from "@/__generated__/graphql";
 import { formatDate } from "@/utils/formatting.utils";
 import { Clock, Folder, MoreHorizontal, Trash2, Share2 } from "lucide-react";
 import { useDeleteFolder } from "@/hooks/use-file-actions"; // Your custom hook
+import { ShareModal } from "../modals/shareModal";
 
 type FolderType = GetFoldersQuery["getFoldersInFolder"][0];
 
@@ -14,6 +15,7 @@ export function FolderGridItem({
   onNavigate: (folder: FolderType) => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { deleteFolder, loading: isDeleting } = useDeleteFolder();
 
@@ -66,7 +68,13 @@ export function FolderGridItem({
         <div className="absolute top-10 right-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
           <ul className="py-1 text-sm text-gray-700">
             <li>
-              <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsShareModalOpen(true);
+                }}
+                className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
+              >
                 <Share2 size={16} />
                 <span>Share</span>
               </button>
@@ -87,6 +95,14 @@ export function FolderGridItem({
           </ul>
         </div>
       )}
+      {isShareModalOpen && (
+        <ShareModal
+          itemType="folder"
+          itemId={folder.id}
+          itemName={folder.name}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
@@ -99,6 +115,7 @@ export function FolderListItem({
   onNavigate: (folder: FolderType) => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { deleteFolder, loading: isDeleting } = useDeleteFolder();
 
@@ -153,7 +170,10 @@ export function FolderListItem({
           <div className="absolute top-10 right-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
             <ul className="py-1 text-sm text-gray-700">
               <li>
-                <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100">
+                <button
+                  onClick={() => setIsShareModalOpen(true)}
+                  className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
+                >
                   <Share2 size={16} />
                   <span>Share</span>
                 </button>
@@ -173,6 +193,14 @@ export function FolderListItem({
               </li>
             </ul>
           </div>
+        )}
+        {isShareModalOpen && (
+          <ShareModal
+            itemType="folder"
+            itemId={folder.id}
+            itemName={folder.name}
+            onClose={() => setIsShareModalOpen(false)}
+          />
         )}
       </div>
     </div>
