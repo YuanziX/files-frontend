@@ -13,6 +13,7 @@ import { GetFileQuery } from "@/__generated__/graphql";
 import { formatBytes, formatDate } from "@/utils/formatting.utils";
 import { getFileIcon } from "@/utils/getIcon.utils";
 import React from "react";
+import { useDownloadFile } from "@/hooks/use-file-actions";
 
 const FilePreviewIcon = ({ mimeType }: { mimeType: string }) => {
   const icon = getFileIcon(mimeType);
@@ -30,6 +31,8 @@ export default function FileViewerPage() {
   const { data, loading, error } = useQuery<GetFileQuery>(GET_FILE_QUERY, {
     variables: { fileId: fileId!, publicToken },
   });
+
+  const { downloadFile } = useDownloadFile();
 
   if (loading) {
     return (
@@ -71,7 +74,12 @@ export default function FileViewerPage() {
           {/* Left Side: Preview and Download */}
           <div className="flex flex-col items-center justify-center bg-gray-50 rounded-xl p-8">
             <FilePreviewIcon mimeType={file.mimeType} />
-            <button className="mt-8 flex items-center gap-2 w-full justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <button
+              onClick={() => {
+                downloadFile(file.id, publicToken);
+              }}
+              className="mt-8 flex items-center gap-2 w-full justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
               <Download size={20} />
               <span>Download</span>
             </button>

@@ -25,6 +25,7 @@ type Documents = {
     "\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n": typeof types.DeleteFileDocument,
     "\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n": typeof types.DeleteFolderDocument,
     "\n  query GetFile($fileId: ID!, $publicToken: String) {\n    getFile(fileId: $fileId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": typeof types.GetFileDocument,
+    "\n  mutation GetDownloadURL($fileId: ID!, $publicToken: String) {\n    getDownloadURL(fileId: $fileId, publicToken: $publicToken) {\n      downloadURL\n      filename\n    }\n  }\n": typeof types.GetDownloadUrlDocument,
     "\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n": typeof types.ShareFileWithUserDocument,
     "\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n": typeof types.ShareFolderWithUserDocument,
     "\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n": typeof types.ShareFilePublicDocument,
@@ -42,6 +43,7 @@ const documents: Documents = {
     "\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n": types.DeleteFileDocument,
     "\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n": types.DeleteFolderDocument,
     "\n  query GetFile($fileId: ID!, $publicToken: String) {\n    getFile(fileId: $fileId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": types.GetFileDocument,
+    "\n  mutation GetDownloadURL($fileId: ID!, $publicToken: String) {\n    getDownloadURL(fileId: $fileId, publicToken: $publicToken) {\n      downloadURL\n      filename\n    }\n  }\n": types.GetDownloadUrlDocument,
     "\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n": types.ShareFileWithUserDocument,
     "\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n": types.ShareFolderWithUserDocument,
     "\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n": types.ShareFilePublicDocument,
@@ -106,6 +108,10 @@ export function graphql(source: "\n  mutation DeleteFolder($folderId: ID!) {\n  
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetFile($fileId: ID!, $publicToken: String) {\n    getFile(fileId: $fileId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"): (typeof documents)["\n  query GetFile($fileId: ID!, $publicToken: String) {\n    getFile(fileId: $fileId, publicToken: $publicToken) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation GetDownloadURL($fileId: ID!, $publicToken: String) {\n    getDownloadURL(fileId: $fileId, publicToken: $publicToken) {\n      downloadURL\n      filename\n    }\n  }\n"): (typeof documents)["\n  mutation GetDownloadURL($fileId: ID!, $publicToken: String) {\n    getDownloadURL(fileId: $fileId, publicToken: $publicToken) {\n      downloadURL\n      filename\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

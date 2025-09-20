@@ -101,3 +101,12 @@ export const GET_FILE_QUERY = graphql(`
     }
   }
 `);
+
+export const GET_FILE_DOWNLOAD_URL_MUTATION = graphql(`
+  mutation GetDownloadURL($fileId: ID!, $publicToken: String) {
+    getDownloadURL(fileId: $fileId, publicToken: $publicToken) {
+      downloadURL
+      filename
+    }
+  }
+`);
