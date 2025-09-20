@@ -5,6 +5,7 @@ import TopBar from "./pages/dashboard";
 import ProtectedRoute from "./utils/routeProtection";
 import FolderById from "./pages/folderById";
 import { Toaster } from "sonner";
+import FileViewerPage from "./pages/fileView";
 
 function App() {
   return (
@@ -19,6 +20,13 @@ function App() {
               path="/share/folder/:public_token/:id"
               element={<FolderById />}
             />
+
+            <Route path="/file/:fileId" element={<FileViewerPage />} />
+            <Route
+              path="/share/file/:publicToken/:fileId"
+              element={<FileViewerPage />}
+            />
+
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
           </Routes>

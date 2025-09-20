@@ -89,3 +89,15 @@ export const DELETE_FOLDER_MUTATION = graphql(`
     deleteFolder(folderId: $folderId)
   }
 `);
+
+export const GET_FILE_QUERY = graphql(`
+  query GetFile($fileId: ID!, $publicToken: String) {
+    getFile(fileId: $fileId, publicToken: $publicToken) {
+      id
+      filename
+      mimeType
+      size
+      uploadDate
+    }
+  }
+`);

@@ -101,6 +101,7 @@ input PreUploadFileInput {
 }
 
 type Query {
+  getFile(fileId: ID!, publicToken: String): File
   getFileShares(fileId: ID!): [Share!]!
   getFilesInFolder(folderId: ID, publicToken: String): [File!]!
   getFolderDetails(folderId: ID!, publicToken: String): Folder

@@ -171,7 +171,10 @@ export function FolderListItem({
             <ul className="py-1 text-sm text-gray-700">
               <li>
                 <button
-                  onClick={() => setIsShareModalOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsShareModalOpen(true);
+                  }}
                   className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
                 >
                   <Share2 size={16} />

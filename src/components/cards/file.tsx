@@ -5,10 +5,13 @@ import { getFileIcon } from "@/utils/getIcon.utils";
 import { Clock, HardDrive, MoreHorizontal, Share2, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ShareModal } from "../modals/shareModal";
+import { useNavigate } from "react-router-dom";
+import useGlobalStore from "@/store/globalStore";
 type FileType = GetFilesQuery["getFilesInFolder"][0];
 
 export function FileGridItem({ file }: { file: FileType }) {
   const { deleteFile, loading: isDeleting } = useDeleteFile();
+  const { currentPublicToken } = useGlobalStore();
 
   const handleDelete = () => {
     if (window.confirm(`Are you sure you want to delete "${file.filename}"?`)) {
@@ -33,9 +36,18 @@ export function FileGridItem({ file }: { file: FileType }) {
     };
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div
       ref={menuRef}
+      onClick={() => {
+        if (currentPublicToken) {
+          navigate(`/share/file/${currentPublicToken}/${file.id}`);
+        } else {
+          navigate(`/file/${file.id}`);
+        }
+      }}
       className="group relative bg-white p-4 rounded-lg border border-gray-200 hover:shadow-md hover:border-blue-500 cursor-pointer transition-all"
     >
       <div className="flex items-center space-x-3 mb-2">
@@ -66,7 +78,10 @@ export function FileGridItem({ file }: { file: FileType }) {
           <ul className="py-1 text-sm text-gray-700">
             <li>
               <button
-                onClick={() => setIsShareModalOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsShareModalOpen(true);
+                }}
                 className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
               >
                 <Share2 size={16} />
@@ -75,7 +90,10 @@ export function FileGridItem({ file }: { file: FileType }) {
             </li>
             <li>
               <button
-                onClick={handleDelete}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
                 disabled={isDeleting}
                 className="flex items-center gap-3 w-full px-4 py-2 text-red-600 hover:bg-red-50 disabled:opacity-50"
               >
@@ -152,7 +170,10 @@ export function FileListItem({ file }: { file: FileType }) {
             <ul className="py-1 text-sm text-gray-700">
               <li>
                 <button
-                  onClick={() => setIsShareModalOpen(true)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsShareModalOpen(true);
+                  }}
                   className="flex items-center gap-3 w-full px-4 py-2 hover:bg-gray-100"
                 >
                   <Share2 size={16} />
