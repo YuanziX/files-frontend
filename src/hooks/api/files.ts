@@ -65,11 +65,27 @@ export const PRE_UPLOAD_CHECK_MUTATION = graphql(`
 export const CONFIRM_UPLOADS_MUTATION = graphql(`
   mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {
     confirmUploads(uploads: $uploads) {
-      id
-      filename
-      mimeType
-      size
-      uploadDate
+      files {
+        id
+        filename
+        uploadDate
+      }
+      failedUploads {
+        hash
+        reason
+      }
     }
+  }
+`);
+
+export const DELETE_FILE_MUTATION = graphql(`
+  mutation DeleteFile($fileId: ID!) {
+    deleteFile(fileId: $fileId)
+  }
+`);
+
+export const DELETE_FOLDER_MUTATION = graphql(`
+  mutation DeleteFolder($folderId: ID!) {
+    deleteFolder(folderId: $folderId)
   }
 `);

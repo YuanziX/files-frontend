@@ -6,9 +6,9 @@ import {
   GET_FOLDERS_QUERY,
   CREATE_FOLDER_MUTATION,
   GET_FOLDER_DETAILS_QUERY,
-} from "@/graphql/queries/files";
+} from "@/hooks/api/files";
 import { GetFoldersQuery } from "@/__generated__/graphql";
-import useGlobalStore from "@/components/store/globalStore";
+import useGlobalStore from "@/store/globalStore";
 import CreateFolderModal from "@/components/modals/createFolder.modal";
 import { FolderGridItem, FolderListItem } from "@/components/cards/folder";
 import { FileGridItem, FileListItem } from "@/components/cards/file";
@@ -25,6 +25,7 @@ export default function FolderById() {
 
   React.useEffect(() => {
     globalStore.SetShowTopBar(true);
+    globalStore.setCurrentFolderId(folderId);
   }, []);
 
   const isModalOpen = useGlobalStore((s) => s.triggerCreateFolderModal);
@@ -36,11 +37,6 @@ export default function FolderById() {
   } = useQuery(GET_FOLDER_DETAILS_QUERY, {
     variables: { folderId: folderId ?? "" },
     skip: !folderId,
-    context: {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    },
   });
 
   const {
@@ -50,11 +46,6 @@ export default function FolderById() {
     refetch: refetchFiles,
   } = useQuery(GET_FILES_QUERY, {
     variables: { folderId },
-    context: {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    },
   });
 
   const {
@@ -64,11 +55,6 @@ export default function FolderById() {
     refetch: refetchFolders,
   } = useQuery(GET_FOLDERS_QUERY, {
     variables: { folderId },
-    context: {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    },
   });
 
   const [
@@ -86,21 +72,9 @@ export default function FolderById() {
   const handleCreateFolder = (name: string) => {
     createFolder({
       variables: { name, parentId: folderId },
-      context: {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-      },
     });
     globalStore.SetTriggerCreateFolderModal(false);
   };
-
-  // ✅ placeholder for when you implement file upload
-  // const handleFileUpload = async () => {
-  //   // after upload completes:
-  //   await Promise.all([
-  //     refetchFolders({ folderId }),
-  //     refetchFiles({ folderId }),
-  //   ]);
-  // };
 
   // ✅ derive breadcrumb array
   let breadcrumbs: { id: string | null; name: string }[] = [

@@ -17,7 +17,7 @@ type AuthContextType = {
   isLoggedIn: boolean;
   loading: boolean;
   triggerAuthRefresh: () => void;
-  profile: boolean;
+  token: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authChanged, setAuthChanged] = useState(0);
-  const [profile, setProfile] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       const me = res.data.data.me;
-      setProfile(true);
+      setToken(token);
       setUser(me);
       setIsLoggedIn(true);
     } catch (err) {
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, loading, triggerAuthRefresh, profile }}
+      value={{ user, isLoggedIn, loading, triggerAuthRefresh, token }}
     >
       {children}
     </AuthContext.Provider>

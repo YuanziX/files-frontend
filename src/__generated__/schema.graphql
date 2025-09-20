@@ -26,9 +26,19 @@ input ConfirmUploadInput {
   size: Int!
 }
 
+type ConfirmUploadsResponse {
+  failedUploads: [FailedUpload!]!
+  files: [File!]!
+}
+
 type DownloadURL {
   downloadURL: String!
   filename: String!
+}
+
+type FailedUpload {
+  hash: String!
+  reason: String!
 }
 
 type File {
@@ -56,7 +66,7 @@ input LoginUser {
 }
 
 type Mutation {
-  confirmUploads(uploads: [ConfirmUploadInput!]!): [File!]!
+  confirmUploads(uploads: [ConfirmUploadInput!]!): ConfirmUploadsResponse!
   createFolder(name: String!, parentId: ID): Folder!
   deleteFile(fileId: ID!): Boolean!
   deleteFolder(folderId: ID!): Boolean!
@@ -66,11 +76,11 @@ type Mutation {
   registerUser(input: RegisterUser!): AuthResponse!
   revokePubliclyShared(publicToken: ID!): Boolean!
   shareFilePublic(fileId: ID!): String!
-  shareFileWithUser(fileId: ID!, userId: ID!): ID!
+  shareFileWithUser(email: String!, fileId: ID!): ID!
   shareFolderPublic(folderId: ID!): String!
-  shareFolderWithUser(folderId: ID!, userId: ID!): ID!
-  unshareFileWithUser(fileId: ID!, userId: ID!): Boolean!
-  unshareFolderWithUser(folderId: ID!, userId: ID!): Boolean!
+  shareFolderWithUser(email: String!, folderId: ID!): ID!
+  unshareFileWithUser(email: String!, fileId: ID!): Boolean!
+  unshareFolderWithUser(email: String!, folderId: ID!): Boolean!
 }
 
 type PreSignedURL {

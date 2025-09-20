@@ -1,8 +1,8 @@
 import React, { useState, FormEvent } from "react";
 import { useMutation } from "@apollo/client/react";
 import { AlertCircle, Lock, Mail } from "lucide-react";
-import { LOGIN_MUTATION } from "@/graphql/queries/auth";
-import useGlobalStore from "@/components/store/globalStore";
+import { LOGIN_MUTATION } from "@/hooks/api/auth";
+import useGlobalStore from "@/store/globalStore";
 
 const InputField = ({
   icon,

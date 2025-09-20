@@ -16,22 +16,34 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 type Documents = {
     "\n  mutation RegisterUser($name: String!, $email: String!, $password: String!) {\n    registerUser(input: { name: $name, email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": typeof types.RegisterUserDocument,
     "\n  mutation Login($email: String!, $password: String!) {\n    login(input: { email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": typeof types.LoginDocument,
-    "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": typeof types.PreUploadCheckDocument,
-    "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": typeof types.ConfirmUploadsDocument,
     "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": typeof types.GetFolderDetailsDocument,
     "\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": typeof types.GetFilesDocument,
     "\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n": typeof types.GetFoldersDocument,
     "\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n": typeof types.CreateFolderDocument,
+    "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": typeof types.PreUploadCheckDocument,
+    "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n": typeof types.ConfirmUploadsDocument,
+    "\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n": typeof types.DeleteFileDocument,
+    "\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n": typeof types.DeleteFolderDocument,
+    "\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n": typeof types.ShareFileWithUserDocument,
+    "\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n": typeof types.ShareFolderWithUserDocument,
+    "\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n": typeof types.ShareFilePublicDocument,
+    "\n  mutation ShareFolderPublic($folderId: ID!) {\n    shareFolderPublic(folderId: $folderId)\n  }\n": typeof types.ShareFolderPublicDocument,
 };
 const documents: Documents = {
     "\n  mutation RegisterUser($name: String!, $email: String!, $password: String!) {\n    registerUser(input: { name: $name, email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": types.RegisterUserDocument,
     "\n  mutation Login($email: String!, $password: String!) {\n    login(input: { email: $email, password: $password }) {\n      user {\n        name\n      }\n      token\n    }\n  }\n": types.LoginDocument,
-    "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": types.PreUploadCheckDocument,
-    "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": types.ConfirmUploadsDocument,
     "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n": types.GetFolderDetailsDocument,
     "\n  query GetFiles($folderId: ID) {\n    getFilesInFolder(folderId: $folderId) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n": types.GetFilesDocument,
     "\n  query GetFolders($folderId: ID) {\n    getFoldersInFolder(folderId: $folderId) {\n      id\n      name\n      createdAt\n    }\n  }\n": types.GetFoldersDocument,
     "\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n": types.CreateFolderDocument,
+    "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n": types.PreUploadCheckDocument,
+    "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n": types.ConfirmUploadsDocument,
+    "\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n": types.DeleteFileDocument,
+    "\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n": types.DeleteFolderDocument,
+    "\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n": types.ShareFileWithUserDocument,
+    "\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n": types.ShareFolderWithUserDocument,
+    "\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n": types.ShareFilePublicDocument,
+    "\n  mutation ShareFolderPublic($folderId: ID!) {\n    shareFolderPublic(folderId: $folderId)\n  }\n": types.ShareFolderPublicDocument,
 };
 
 /**
@@ -59,14 +71,6 @@ export function graphql(source: "\n  mutation Login($email: String!, $password: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"): (typeof documents)["\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      id\n      filename\n      mimeType\n      size\n      uploadDate\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"): (typeof documents)["\n  query GetFolderDetails($folderId: ID!) {\n    getFolderDetails(folderId: $folderId) {\n      id\n      name\n      path\n      realPath\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -80,6 +84,38 @@ export function graphql(source: "\n  query GetFolders($folderId: ID) {\n    getF
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n"): (typeof documents)["\n  mutation CreateFolder($name: String!, $parentId: ID) {\n    createFolder(name: $name, parentId: $parentId) {\n      id\n      name\n      createdAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation PreUploadCheck($files: [PreUploadFileInput!]!) {\n    preUploadCheck(files: $files) {\n      completedFiles {\n        id\n        filename\n        mimeType\n        size\n        uploadDate\n      }\n      newFiles {\n        filename\n        hash\n        uploadURL\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConfirmUploads($uploads: [ConfirmUploadInput!]!) {\n    confirmUploads(uploads: $uploads) {\n      files {\n        id\n        filename\n        uploadDate\n      }\n      failedUploads {\n        hash\n        reason\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n"): (typeof documents)["\n  mutation DeleteFile($fileId: ID!) {\n    deleteFile(fileId: $fileId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n"): (typeof documents)["\n  mutation DeleteFolder($folderId: ID!) {\n    deleteFolder(folderId: $folderId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n"): (typeof documents)["\n  mutation ShareFileWithUser($fileId: ID!, $email: String!) {\n    shareFileWithUser(fileId: $fileId, email: $email)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n"): (typeof documents)["\n  mutation ShareFolderWithUser($folderId: ID!, $email: String!) {\n    shareFolderWithUser(folderId: $folderId, email: $email)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n"): (typeof documents)["\n  mutation ShareFilePublic($fileId: ID!) {\n    shareFilePublic(fileId: $fileId)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ShareFolderPublic($folderId: ID!) {\n    shareFolderPublic(folderId: $folderId)\n  }\n"): (typeof documents)["\n  mutation ShareFolderPublic($folderId: ID!) {\n    shareFolderPublic(folderId: $folderId)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

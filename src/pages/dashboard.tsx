@@ -5,7 +5,9 @@ import {
   FolderPlus,
   Search,
 } from "lucide-react";
-import useGlobalStore from "@/components/store/globalStore";
+import useGlobalStore from "@/store/globalStore";
+import { UploadModal } from "@/components/modals/uploadModal";
+import { UploadProgressPanel } from "@/components/uploadProgressPanel";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const globalStore = useGlobalStore();
@@ -29,7 +31,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button
+                onClick={() => globalStore.setIsUploadModalOpen(true)}
+                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
                 <UploadCloud size={18} />
                 Upload
               </button>
@@ -67,6 +72,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         )}
         {children}
       </main>
+      {globalStore.isUploadModalOpen && <UploadModal />}
+      <UploadProgressPanel />
     </div>
   );
 }

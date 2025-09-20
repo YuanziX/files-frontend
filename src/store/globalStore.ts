@@ -9,6 +9,11 @@ interface StoreState {
 
   viewType: "list" | "grid";
   SetViewType: (viewType: StoreState["viewType"]) => void;
+
+  isUploadModalOpen: boolean;
+  setIsUploadModalOpen: (isOpen: boolean) => void;
+  currentFolderId: string | null;
+  setCurrentFolderId: (id: string | null) => void;
 }
 
 const useGlobalStore = create<StoreState>((set) => ({
@@ -21,6 +26,11 @@ const useGlobalStore = create<StoreState>((set) => ({
 
   viewType: "grid",
   SetViewType: (viewType: StoreState["viewType"]) => set({ viewType }),
+
+  isUploadModalOpen: false,
+  setIsUploadModalOpen: (isOpen) => set({ isUploadModalOpen: isOpen }),
+  currentFolderId: null,
+  setCurrentFolderId: (id) => set({ currentFolderId: id }),
 }));
 
 export default useGlobalStore;
