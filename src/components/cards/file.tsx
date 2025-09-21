@@ -250,19 +250,6 @@ export function FileListItem({ file }: { file: FileType }) {
     };
   }, []);
 
-  // Get file type for styling
-  const getFileTypeStyle = (mimeType: string) => {
-    if (mimeType.startsWith("image/")) return "from-pink-500 to-rose-500";
-    if (mimeType.startsWith("video/")) return "from-purple-500 to-indigo-500";
-    if (mimeType.startsWith("audio/")) return "from-green-500 to-emerald-500";
-    if (mimeType.includes("pdf")) return "from-red-500 to-red-600";
-    if (mimeType.includes("document") || mimeType.includes("word"))
-      return "from-blue-500 to-blue-600";
-    if (mimeType.includes("spreadsheet") || mimeType.includes("excel"))
-      return "from-green-600 to-green-700";
-    return "from-slate-500 to-slate-600";
-  };
-
   return (
     <div ref={menuRef} className="group relative">
       <div
