@@ -21,6 +21,7 @@
     "clsx": "^2.1.1",
     "graphql": "^16.11.0",
     "graphql-request": "^7.2.0",
+    "gsap": "^3.13.0",
     "lucide-react": "^0.477.0",
     "motion": "^12.23.16",
     "postprocessing": "^6.37.8",

@@ -13,6 +13,7 @@ import {
 import { useDeleteFolder } from "@/hooks/use-file-actions";
 import { ShareModal } from "../modals/shareModal";
 import { toast } from "sonner";
+import { BlurFade } from "@/components/ui/blur-fade";
 
 type FolderType = GetFoldersQuery["getFoldersInFolder"][0];
 
@@ -59,76 +60,80 @@ export function FolderGridItem({
       className="group relative"
     >
       {/* Main Card */}
-      <div
-        onClick={() => onNavigate(folder)}
-        className="relative bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-200/60 hover:border-blue-300/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
-      >
-        {/* Folder Icon with Minimal Background */}
-        <div className="relative mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-slate-300 rounded-xl flex items-center justify-center shadow-sm mb-3">
-            <div className="text-slate-600">
-              {isHovered ? <FolderOpen size={24} /> : <Folder size={24} />}
-            </div>
-          </div>
-        </div>
-
-        {/* Folder Info */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 leading-tight">
-            {folder.name}
-          </h3>
-
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <div className="flex items-center gap-1">
-              <Folder size={12} />
-              <span className="font-medium">Folder</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Calendar size={12} />
-              <span>{formatDate(folder.createdAt)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Hover Overlay */}
+      <BlurFade delay={0}>
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-2xl transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-        />
-
-        {/* Quick Actions */}
-        <div
-          className={`absolute bottom-4 left-4 right-4 flex items-center justify-between transition-all duration-300 ${
-            isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-          }`}
+          onClick={() => onNavigate(folder)}
+          className="relative bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-200/60 hover:border-blue-300/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
         >
-          <div className="flex items-center gap-1">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsShareModalOpen(true);
-              }}
-              className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-blue-600 transition-colors shadow-sm"
-            >
-              <Share2 size={14} />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                // Handle copy link
-                navigator.clipboard.writeText(
-                  `${window.location.origin}/dashboard/${folder.id}`
-                );
-                toast.success("Link copied to clipboard");
-              }}
-              className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-slate-700 transition-colors shadow-sm"
-            >
-              <Copy size={14} />
-            </button>
+          {/* Folder Icon with Minimal Background */}
+          <div className="relative mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-slate-300 rounded-xl flex items-center justify-center shadow-sm mb-3">
+              <div className="text-slate-600">
+                {isHovered ? <FolderOpen size={24} /> : <Folder size={24} />}
+              </div>
+            </div>
+          </div>
+
+          {/* Folder Info */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 leading-tight">
+              {folder.name}
+            </h3>
+
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center gap-1">
+                <Folder size={12} />
+                <span className="font-medium">Folder</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar size={12} />
+                <span>{formatDate(folder.createdAt)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hover Overlay */}
+          <div
+            className={`absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-2xl transition-opacity duration-300 ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+          />
+
+          {/* Quick Actions */}
+          <div
+            className={`absolute bottom-4 left-4 right-4 flex items-center justify-between transition-all duration-300 ${
+              isHovered
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-2"
+            }`}
+          >
+            <div className="flex items-center gap-1">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsShareModalOpen(true);
+                }}
+                className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-blue-600 transition-colors shadow-sm"
+              >
+                <Share2 size={14} />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Handle copy link
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/dashboard/${folder.id}`
+                  );
+                  toast.success("Link copied to clipboard");
+                }}
+                className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-slate-700 transition-colors shadow-sm"
+              >
+                <Copy size={14} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </BlurFade>
 
       {/* Menu Button */}
       <button

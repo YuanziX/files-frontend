@@ -16,6 +16,7 @@ import { ShareModal } from "../modals/shareModal";
 import { useNavigate } from "react-router-dom";
 import useGlobalStore from "@/store/globalStore";
 import { toast } from "sonner";
+import { BlurFade } from "@/components/ui/blur-fade";
 
 type FileType = GetFilesQuery["getFilesInFolder"][0];
 
@@ -65,65 +66,69 @@ export function FileGridItem({ file }: { file: FileType }) {
       className="group relative"
     >
       {/* Main Card */}
-      <div
-        onClick={handleFileClick}
-        className="relative bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-200/60 hover:border-blue-300/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
-      >
-        {/* File Icon with Gradient Background */}
-        <div className="relative mb-4">
-          <div
-            className={`w-12 h-12 bg-gradient-to-br ${getFileTypeStyle(
-              file.mimeType
-            )} rounded-xl flex items-center justify-center shadow-lg mb-3`}
-          >
-            <div className="text-white">{getFileIcon(file.mimeType, 24)}</div>
-          </div>
-        </div>
-
-        {/* File Info */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 leading-tight">
-            {file.filename}
-          </h3>
-
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <div className="flex items-center gap-1">
-              <HardDrive size={12} />
-              <span className="font-medium">{formatBytes(file.size)}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock size={12} />
-              <span>{formatDate(file.uploadDate)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Hover Overlay */}
+      <BlurFade delay={0}>
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-        />
-
-        {/* Quick Actions */}
-        <div
-          className={`absolute bottom-4 left-4 right-4 flex items-center justify-between transition-all duration-300 ${
-            isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-          }`}
+          onClick={handleFileClick}
+          className="relative bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-slate-200/60 hover:border-blue-300/60 cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
         >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              // Handle download
-              downloadFile(file.id, currentPublicToken);
-              toast.success("Downloading");
-            }}
-            className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-green-600 transition-colors shadow-sm"
+          {/* File Icon with Gradient Background */}
+          <div className="relative mb-4">
+            <div
+              className={`w-12 h-12 bg-gradient-to-br ${getFileTypeStyle(
+                file.mimeType
+              )} rounded-xl flex items-center justify-center shadow-lg mb-3`}
+            >
+              <div className="text-white">{getFileIcon(file.mimeType, 24)}</div>
+            </div>
+          </div>
+
+          {/* File Info */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-slate-800 line-clamp-2 leading-tight">
+              {file.filename}
+            </h3>
+
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center gap-1">
+                <HardDrive size={12} />
+                <span className="font-medium">{formatBytes(file.size)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock size={12} />
+                <span>{formatDate(file.uploadDate)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hover Overlay */}
+          <div
+            className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl transition-opacity duration-300 ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+          />
+
+          {/* Quick Actions */}
+          <div
+            className={`absolute bottom-4 left-4 right-4 flex items-center justify-between transition-all duration-300 ${
+              isHovered
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-2"
+            }`}
           >
-            <Download size={14} />
-          </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Handle download
+                downloadFile(file.id, currentPublicToken);
+                toast.success("Downloading");
+              }}
+              className="p-2 bg-white/90 text-slate-600 rounded-lg hover:bg-white hover:text-green-600 transition-colors shadow-sm"
+            >
+              <Download size={14} />
+            </button>
+          </div>
         </div>
-      </div>
+      </BlurFade>
 
       {/* Menu Button */}
       <button
