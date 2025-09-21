@@ -45,6 +45,8 @@ interface StoreState {
 
   isSortFilterModalOpen: boolean;
   setIsSortFilterModalOpen: (isOpen: boolean) => void;
+
+  logout: () => void;
 }
 
 const useGlobalStore = create<StoreState>((set) => ({
@@ -93,6 +95,11 @@ const useGlobalStore = create<StoreState>((set) => ({
 
   isSortFilterModalOpen: false,
   setIsSortFilterModalOpen: (isOpen) => set({ isSortFilterModalOpen: isOpen }),
+
+  logout: () => {
+    // clear token from local storage
+    localStorage.removeItem("token");
+  },
 }));
 
 export default useGlobalStore;
