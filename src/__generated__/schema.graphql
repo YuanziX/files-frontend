@@ -146,6 +146,7 @@ type Query {
   getFoldersInFolder(filter: FolderFilterInput, folderId: ID, publicToken: String, sort: FolderSortInput): [Folder!]!
   getMyShares: [Share!]!
   me: User!
+  searchFiles(query: String!, search: String!): [File!]!
 }
 
 input RegisterUser {

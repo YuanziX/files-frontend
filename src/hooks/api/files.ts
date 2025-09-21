@@ -130,3 +130,15 @@ export const GET_FILE_DOWNLOAD_URL_MUTATION = graphql(`
     }
   }
 `);
+
+export const SEARCH_FILES_QUERY = graphql(`
+  query SearchFiles($query: String!, $search: String!) {
+    searchFiles(query: $query, search: $search) {
+      id
+      filename
+      size
+      mimeType
+      uploadDate
+    }
+  }
+`);

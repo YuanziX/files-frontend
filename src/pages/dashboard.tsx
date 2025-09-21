@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
   LayoutGrid,
   List,
@@ -7,14 +8,53 @@ import {
   Filter,
   HardDrive,
   LogOut,
+  X,
 } from "lucide-react";
 import useGlobalStore from "@/store/globalStore";
 import { UploadModal } from "@/components/modals/uploadModal";
 import { UploadProgressPanel } from "@/components/uploadProgressPanel";
 import SortFilterModal from "@/components/modals/sortAndFilter";
+import { SearchResults } from "@/components/searchResults";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const globalStore = useGlobalStore();
+  const [searchInput, setSearchInput] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+      if (e.key === "Escape") {
+        handleClearSearch();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, []);
+
+  // Debounced search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      globalStore.setSearchQuery(searchInput);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, globalStore]);
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    globalStore.clearSearch();
+    searchInputRef.current?.blur();
+  };
 
   // Check if any filters or sorts are active
   const hasActiveFilters =
@@ -22,6 +62,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     globalStore.fileFilterInput ||
     globalStore.folderSortInput ||
     globalStore.folderFilterInput;
+
+  const isSearchActive = globalStore.searchQuery.length > 0;
 
   return (
     <div className="flex h-screen font-sans bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50">
@@ -54,18 +96,41 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                   {/* Enhanced Search */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Search className="w-5 h-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                      <Search
+                        className={`w-5 h-5 transition-colors ${
+                          isSearchActive
+                            ? "text-blue-500"
+                            : "text-slate-400 group-focus-within:text-blue-500"
+                        }`}
+                      />
                     </div>
                     <input
+                      ref={searchInputRef}
                       type="text"
                       placeholder="Search files and folders..."
-                      className="w-80 pl-12 pr-4 py-3 bg-slate-100/60 border border-slate-200/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 focus:bg-white/80 transition-all duration-200 placeholder:text-slate-400"
+                      value={searchInput}
+                      onChange={handleSearchInputChange}
+                      className={`w-80 pl-12 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 transition-all duration-200 placeholder:text-slate-400 ${
+                        isSearchActive
+                          ? "bg-white border-blue-300 shadow-sm"
+                          : "bg-slate-100/60 border-slate-200/60 focus:bg-white/80"
+                      }`}
                     />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                      <kbd className="px-2 py-1 text-xs font-semibold text-slate-500 bg-slate-200/60 border border-slate-300/60 rounded-md">
-                        ⌘K
-                      </kbd>
-                    </div>
+                    {isSearchActive && (
+                      <button
+                        onClick={handleClearSearch}
+                        className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                    {!isSearchActive && (
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <kbd className="px-2 py-1 text-xs font-semibold text-slate-500 bg-slate-200/60 border border-slate-300/60 rounded-md">
+                          ⌘K
+                        </kbd>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -190,7 +255,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
 
         {/* Enhanced Content Area */}
         <div className="flex-1 bg-gradient-to-b from-transparent to-slate-50/30">
-          {children}
+          {isSearchActive ? <SearchResults /> : children}
         </div>
       </main>
 

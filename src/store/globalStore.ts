@@ -46,6 +46,10 @@ interface StoreState {
   isSortFilterModalOpen: boolean;
   setIsSortFilterModalOpen: (isOpen: boolean) => void;
 
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  clearSearch: () => void;
+
   logout: () => void;
 }
 
@@ -95,6 +99,10 @@ const useGlobalStore = create<StoreState>((set) => ({
 
   isSortFilterModalOpen: false,
   setIsSortFilterModalOpen: (isOpen) => set({ isSortFilterModalOpen: isOpen }),
+
+  searchQuery: "",
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  clearSearch: () => set({ searchQuery: "" }),
 
   logout: () => {
     // clear token from local storage
