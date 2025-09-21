@@ -12,8 +12,18 @@ export const GET_FOLDER_DETAILS_QUERY = graphql(`
 `);
 
 export const GET_FILES_QUERY = graphql(`
-  query GetFiles($folderId: ID, $publicToken: String) {
-    getFilesInFolder(folderId: $folderId, publicToken: $publicToken) {
+  query GetFiles(
+    $folderId: ID
+    $publicToken: String
+    $sort: FileSortInput
+    $filter: FileFilterInput
+  ) {
+    getFilesInFolder(
+      folderId: $folderId
+      publicToken: $publicToken
+      sort: $sort
+      filter: $filter
+    ) {
       id
       filename
       mimeType
@@ -24,8 +34,18 @@ export const GET_FILES_QUERY = graphql(`
 `);
 
 export const GET_FOLDERS_QUERY = graphql(`
-  query GetFolders($folderId: ID, $publicToken: String) {
-    getFoldersInFolder(folderId: $folderId, publicToken: $publicToken) {
+  query GetFolders(
+    $folderId: ID
+    $publicToken: String
+    $sort: FolderSortInput
+    $filter: FolderFilterInput
+  ) {
+    getFoldersInFolder(
+      folderId: $folderId
+      publicToken: $publicToken
+      sort: $sort
+      filter: $filter
+    ) {
       id
       name
       createdAt

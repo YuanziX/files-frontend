@@ -38,7 +38,10 @@ export default function FolderById() {
     loading: folderDetailsLoading,
     error: folderDetailsError,
   } = useQuery(GET_FOLDER_DETAILS_QUERY, {
-    variables: { folderId: folderId!, publicToken: publicToken },
+    variables: {
+      folderId: folderId!,
+      publicToken: publicToken,
+    },
     skip: !folderId,
   });
 
@@ -47,7 +50,12 @@ export default function FolderById() {
     loading: filesLoading,
     error: filesError,
   } = useQuery(GET_FILES_QUERY, {
-    variables: { folderId: folderId, publicToken: publicToken },
+    variables: {
+      folderId: folderId,
+      publicToken: publicToken,
+      filter: globalStore.fileFilterInput,
+      sort: globalStore.fileSortInput,
+    },
   });
 
   const {
@@ -55,7 +63,12 @@ export default function FolderById() {
     loading: foldersLoading,
     error: foldersError,
   } = useQuery(GET_FOLDERS_QUERY, {
-    variables: { folderId: folderId, publicToken: publicToken },
+    variables: {
+      folderId: folderId,
+      publicToken: publicToken,
+      filter: globalStore.folderFilterInput,
+      sort: globalStore.folderSortInput,
+    },
   });
 
   const [

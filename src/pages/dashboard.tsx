@@ -4,19 +4,27 @@ import {
   UploadCloud,
   FolderPlus,
   Search,
+  Filter,
 } from "lucide-react";
 import useGlobalStore from "@/store/globalStore";
 import { UploadModal } from "@/components/modals/uploadModal";
 import { UploadProgressPanel } from "@/components/uploadProgressPanel";
+import SortFilterModal from "@/components/modals/sortAndFilter";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const globalStore = useGlobalStore();
+
+  // Check if any filters or sorts are active
+  const hasActiveFilters =
+    globalStore.fileSortInput ||
+    globalStore.fileFilterInput ||
+    globalStore.folderSortInput ||
+    globalStore.folderFilterInput;
 
   return (
     <div className="flex h-screen font-sans bg-gray-50">
       <main className="flex-1 flex flex-col">
         {/* Top Bar */}
-
         {globalStore.showTopBar && (
           <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -44,6 +52,20 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               >
                 <FolderPlus size={18} />
                 New Folder
+              </button>
+              <button
+                onClick={() => globalStore.setIsSortFilterModalOpen(true)}
+                className={`hidden sm:flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors relative ${
+                  hasActiveFilters
+                    ? "bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100"
+                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                <Filter size={18} />
+                Sort & Filter
+                {hasActiveFilters && (
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></span>
+                )}
               </button>
               <div className="flex items-center border border-gray-300 rounded-lg">
                 <button
@@ -73,6 +95,12 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       {globalStore.isUploadModalOpen && <UploadModal />}
+      {globalStore.isSortFilterModalOpen && (
+        <SortFilterModal
+          isOpen={globalStore.isSortFilterModalOpen}
+          onClose={() => globalStore.setIsSortFilterModalOpen(false)}
+        />
+      )}
       <UploadProgressPanel />
     </div>
   );

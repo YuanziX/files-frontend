@@ -49,6 +49,27 @@ type File {
   uploadDate: Time!
 }
 
+input FileFilterInput {
+  filename: String
+  maxSize: Int
+  mimeType: String
+  minSize: Int
+  uploadedAfter: Time
+  uploadedBefore: Time
+}
+
+enum FileSortField {
+  FILENAME
+  MIME_TYPE
+  SIZE
+  UPLOAD_DATE
+}
+
+input FileSortInput {
+  field: FileSortField!
+  order: SortOrder!
+}
+
 type Folder {
   childrenFiles: [File!]!
   childrenFolders: [Folder!]!
@@ -58,6 +79,22 @@ type Folder {
   parentID: ID
   path: String!
   realPath: String!
+}
+
+input FolderFilterInput {
+  createdAfter: Time
+  createdBefore: Time
+  name: String
+}
+
+enum FolderSortField {
+  CREATED_AT
+  NAME
+}
+
+input FolderSortInput {
+  field: FolderSortField!
+  order: SortOrder!
 }
 
 input LoginUser {
@@ -103,10 +140,10 @@ input PreUploadFileInput {
 type Query {
   getFile(fileId: ID!, publicToken: String): File
   getFileShares(fileId: ID!): [Share!]!
-  getFilesInFolder(folderId: ID, publicToken: String): [File!]!
+  getFilesInFolder(filter: FileFilterInput, folderId: ID, publicToken: String, sort: FileSortInput): [File!]!
   getFolderDetails(folderId: ID!, publicToken: String): Folder
   getFolderShares(folderId: ID!): [Share!]!
-  getFoldersInFolder(folderId: ID, publicToken: String): [Folder!]!
+  getFoldersInFolder(filter: FolderFilterInput, folderId: ID, publicToken: String, sort: FolderSortInput): [Folder!]!
   getMyShares: [Share!]!
   me: User!
 }
@@ -130,6 +167,11 @@ type Share {
   publicToken: String
   shareType: String!
   sharedWith: User
+}
+
+enum SortOrder {
+  ASC
+  DESC
 }
 
 scalar Time

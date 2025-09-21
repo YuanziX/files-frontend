@@ -1,3 +1,9 @@
+import {
+  FileFilterInput,
+  FileSortInput,
+  FolderFilterInput,
+  FolderSortInput,
+} from "@/__generated__/graphql";
 import { create } from "zustand";
 
 interface StoreState {
@@ -18,6 +24,27 @@ interface StoreState {
 
   currentFolderId: string | null;
   setCurrentFolderId: (id: string | null) => void;
+
+  fileSortInput: FileSortInput | null;
+  setFileSortInput: (sort: FileSortInput | null) => void;
+
+  fileFilterInput: FileFilterInput | null;
+  setFileFilterInput: (filter: FileFilterInput | null) => void;
+
+  folderSortInput: FolderSortInput | null;
+  setFolderSortInput: (sort: FolderSortInput | null) => void;
+
+  folderFilterInput: FolderFilterInput | null;
+  setFolderFilterInput: (filter: FolderFilterInput | null) => void;
+
+  clearFileSort: () => void;
+  clearFileFilter: () => void;
+  clearFolderSort: () => void;
+  clearFolderFilter: () => void;
+  clearAllFiltersAndSorts: () => void;
+
+  isSortFilterModalOpen: boolean;
+  setIsSortFilterModalOpen: (isOpen: boolean) => void;
 }
 
 const useGlobalStore = create<StoreState>((set) => ({
@@ -39,6 +66,33 @@ const useGlobalStore = create<StoreState>((set) => ({
 
   currentFolderId: null,
   setCurrentFolderId: (id) => set({ currentFolderId: id }),
+
+  fileSortInput: null,
+  setFileSortInput: (sort) => set({ fileSortInput: sort }),
+
+  fileFilterInput: null,
+  setFileFilterInput: (filter) => set({ fileFilterInput: filter }),
+
+  folderSortInput: null,
+  setFolderSortInput: (sort) => set({ folderSortInput: sort }),
+
+  folderFilterInput: null,
+  setFolderFilterInput: (filter) => set({ folderFilterInput: filter }),
+
+  clearFileSort: () => set({ fileSortInput: null }),
+  clearFileFilter: () => set({ fileFilterInput: null }),
+  clearFolderSort: () => set({ folderSortInput: null }),
+  clearFolderFilter: () => set({ folderFilterInput: null }),
+  clearAllFiltersAndSorts: () =>
+    set({
+      fileSortInput: null,
+      fileFilterInput: null,
+      folderSortInput: null,
+      folderFilterInput: null,
+    }),
+
+  isSortFilterModalOpen: false,
+  setIsSortFilterModalOpen: (isOpen) => set({ isSortFilterModalOpen: isOpen }),
 }));
 
 export default useGlobalStore;
