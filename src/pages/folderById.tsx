@@ -26,7 +26,7 @@ export default function FolderById() {
   const globalStore = useGlobalStore();
 
   React.useEffect(() => {
-    globalStore.SetShowTopBar(true);
+    globalStore.SetShowTopBar(publicToken === null);
     globalStore.SetCurrentPublicToken(publicToken);
     globalStore.setCurrentFolderId(folderId);
   }, [folderId, publicToken]);
