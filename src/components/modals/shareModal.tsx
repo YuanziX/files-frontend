@@ -6,6 +6,7 @@ import {
   useShareFileWithUser,
   useShareFolderWithUser,
 } from "@/hooks/use-share-actions";
+import { toast } from "sonner";
 
 type ShareModalProps = {
   itemType: "file" | "folder";
@@ -22,9 +23,8 @@ export const ShareModal = ({
 }: ShareModalProps) => {
   const [activeTab, setActiveTab] = useState<"public" | "user">("public");
   const [email, setEmail] = useState("");
-  const [publicLink, setPublicLink] = useState("");
+  const [sharedLink, setSharedLink] = useState("");
   const [hasCopied, setHasCopied] = useState(false);
-  const [shareSuccess, setShareSuccess] = useState(false);
 
   const { shareFilePublic, loading: loadingFilePublic } = useShareFilePublic();
   const { shareFolderPublic, loading: loadingFolderPublic } =
@@ -47,36 +47,36 @@ export const ShareModal = ({
         result = await shareFilePublic({ variables: { fileId: itemId } });
         const token = result.data?.shareFilePublic;
         if (token)
-          setPublicLink(
+          setSharedLink(
             `${window.location.origin}/share/file/${token}/${itemId}`
           );
       } else {
         result = await shareFolderPublic({ variables: { folderId: itemId } });
         const token = result.data?.shareFolderPublic;
         if (token)
-          setPublicLink(
+          setSharedLink(
             `${window.location.origin}/share/folder/${token}/${itemId}`
           );
       }
     } catch (e) {
       console.error(e);
-      // You could add an error state here
+      toast.error("Failed to generate public link.");
     }
   };
 
   const handleShareWithUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-    setShareSuccess(false);
     try {
       if (itemType === "file") {
         await shareFileWithUser({ variables: { fileId: itemId, email } });
+        setSharedLink(`${window.location.origin}/file/${itemId}`);
       } else {
         await shareFolderWithUser({
           variables: { folderId: itemId, email: email },
         });
+        setSharedLink(`${window.location.origin}/dashboard/${itemId}`);
       }
-      setShareSuccess(true);
       setEmail("");
     } catch (e) {
       console.error(e);
@@ -84,7 +84,7 @@ export const ShareModal = ({
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(publicLink);
+    navigator.clipboard.writeText(sharedLink);
     setHasCopied(true);
     setTimeout(() => setHasCopied(false), 2000);
   };
@@ -134,11 +134,11 @@ export const ShareModal = ({
               <p className="text-sm text-gray-600 mb-4">
                 Anyone with the link can view this {itemType}.
               </p>
-              {publicLink ? (
+              {sharedLink ? (
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
-                    value={publicLink}
+                    value={sharedLink}
                     readOnly
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-sm"
                   />
@@ -171,17 +171,30 @@ export const ShareModal = ({
                 placeholder="Enter email..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
               />
-              <button
-                type="submit"
-                disabled={isLoading || !email.trim()}
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              >
-                {isLoading ? "Sharing..." : `Share ${itemType}`}
-              </button>
-              {shareSuccess && (
-                <p className="text-green-600 text-sm mt-2 text-center">
-                  Successfully shared!
-                </p>
+
+              {sharedLink ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={sharedLink}
+                    readOnly
+                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-sm"
+                  />
+                  <button
+                    onClick={copyToClipboard}
+                    className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {hasCopied ? <Check size={20} /> : <Copy size={20} />}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isLoading || !email.trim()}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isLoading ? "Sharing..." : `Share ${itemType}`}
+                </button>
               )}
             </form>
           )}

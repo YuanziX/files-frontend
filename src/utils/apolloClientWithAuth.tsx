@@ -12,7 +12,7 @@ function useApolloClientWithAuth() {
   return useMemo(() => {
     const httpLink = new HttpLink({ uri: BASE_URL });
 
-    const authLink = new SetContextLink((prevContext, operation) => {
+    const authLink = new SetContextLink((prevContext) => {
       return {
         headers: {
           ...prevContext.headers,
