@@ -17,10 +17,11 @@ import { GET_FILE_QUERY } from "@/hooks/api/files";
 import { GetFileQuery } from "@/__generated__/graphql";
 import { formatBytes, formatDate } from "@/utils/formatting.utils";
 import { getFileIcon, getFileTypeDisplayName } from "@/utils/getIcon.utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDownloadFile } from "@/hooks/use-file-actions";
 import { useNavigate } from "react-router-dom";
 import { ShareModal } from "@/components/modals/shareModal";
+import useGlobalStore from "@/store/globalStore";
 
 const FilePreviewIcon = ({ mimeType }: { mimeType: string }) => {
   const icon = getFileIcon(mimeType, 80);
@@ -40,8 +41,13 @@ export default function FileViewerPage() {
   }>();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
-
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const { SetShowTopBar } = useGlobalStore();
+
+  useEffect(() => {
+    SetShowTopBar(false);
+  }, []);
 
   const { data, loading, error } = useQuery<GetFileQuery>(GET_FILE_QUERY, {
     variables: { fileId: fileId!, publicToken },
