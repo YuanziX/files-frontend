@@ -10,7 +10,9 @@ import FileViewerPage from "./pages/fileView";
 function App() {
   return (
     <BrowserRouter>
+      {/* Attach the Toaster component to display notifications */}
       <Toaster richColors />
+      {/* Route Protection to restrict non user to only login and signup */}
       <ProtectedRoute>
         <TopBar>
           <Routes>

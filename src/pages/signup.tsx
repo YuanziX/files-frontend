@@ -1,3 +1,23 @@
+/**
+ * SignupPage Component
+ *
+ * This component renders the signup page for the FileVault application.
+ * It provides a form for users to create a new account by entering their name, email, and password.
+ * Features include:
+ * - Password strength indicator
+ * - Error handling and feedback
+ * - Responsive design with branding and feature highlights
+ * - Integration with GraphQL mutation for user registration
+ * - Redirects to dashboard upon successful signup
+ * - Links to Terms of Service, Privacy Policy, and Login page
+ *
+ * Dependencies:
+ * - React, useState, useEffect
+ * - Apollo Client's useMutation
+ * - Lucide React icons
+ * - Custom hooks and components: useGlobalStore, InputField, PixelBlast, FeaturesGrid
+ */
+
 import React, { useState, FormEvent } from "react";
 import { useMutation } from "@apollo/client/react";
 import { SIGNUP_USER_MUTATION } from "@/hooks/api/auth";

@@ -22,6 +22,7 @@ import { useDownloadFile } from "@/hooks/use-file-actions";
 import { useNavigate } from "react-router-dom";
 import { ShareModal } from "@/components/modals/shareModal";
 import { BlurFade } from "@/components/ui/blur-fade";
+import globalStore from "@/store/globalStore";
 
 const FilePreviewIcon = ({ mimeType }: { mimeType: string }) => {
   const icon = getFileIcon(mimeType, 80);
@@ -35,6 +36,10 @@ const FilePreviewIcon = ({ mimeType }: { mimeType: string }) => {
 };
 
 export default function FileViewerPage() {
+  React.useEffect(() => {
+    globalStore().SetShowTopBar(publicToken === null);
+  }, []);
+
   const { fileId, publicToken } = useParams<{
     fileId: string;
     publicToken?: string;

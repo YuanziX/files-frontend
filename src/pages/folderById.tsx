@@ -1,3 +1,16 @@
+/**
+ * FolderById component displays the contents of a folder (subfolders and files) based on the folder ID from the route parameters.
+ *
+ * - Fetches folder details, files, and subfolders using GraphQL queries.
+ * - Handles navigation between folders and supports public/shared folder access via a token.
+ * - Displays breadcrumbs for folder navigation.
+ * - Allows creation of new folders via a modal dialog.
+ * - Shows loading and error states for data fetching and mutations.
+ * - Supports grid and list views for displaying folders and files.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered folder view with files, folders, breadcrumbs, and modal for folder creation.
+ */
 import { useParams, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { AlertCircle, Home, ChevronRight } from "lucide-react";

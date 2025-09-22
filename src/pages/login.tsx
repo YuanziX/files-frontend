@@ -1,3 +1,19 @@
+/**
+ * LoginPage component renders the login screen for the FileVault application.
+ *
+ * Features:
+ * - Displays branding and feature highlights on large screens.
+ * - Provides a login form with email and password fields.
+ * - Handles authentication via GraphQL mutation (`LOGIN_MUTATION`).
+ * - Shows loading state and error messages during login attempts.
+ * - Stores authentication token in localStorage upon successful login.
+ * - Redirects user to the dashboard after login.
+ * - Includes a link to the signup page for new users.
+ * - Uses custom UI components for input fields and background effects.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered login page.
+ */
 import React, { useState, FormEvent } from "react";
 import { useMutation } from "@apollo/client/react";
 import {
