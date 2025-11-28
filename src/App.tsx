@@ -16,6 +16,7 @@ function App() {
       <ProtectedRoute>
         <TopBar>
           <Routes>
+            <Route path="/" element={<FolderById />} />
             <Route path="/dashboard" element={<FolderById />} />
             <Route path="/dashboard/:id" element={<FolderById />} />
             <Route
